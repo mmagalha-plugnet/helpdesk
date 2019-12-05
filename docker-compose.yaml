@@ -1,0 +1,41 @@
+version: "3.5"
+
+services:
+#Mysql Container
+  mysql:
+    image: mysql:5.7.23
+    networks:
+    - glpi
+    container_name: mysql
+    hostname: mysql
+    restart: always
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=ncc1701
+      - MYSQL_DATABASE=glpidb
+      - MYSQL_USER=glpi_user
+      - MYSQL_PASSWORD=ncc1701
+
+#GLPI Container
+  app:
+    image: glpi:pnet
+    networks:
+    - glpi
+#    - external
+    container_name : glpi
+    hostname: glpi
+    restart: always
+    volumes:
+    - app:/var/www/html
+    ports:
+    - "8080:80"
+
+networks:
+  glpi:
+#  external:
+#    external: true
+
+volumes:
+    db:
+    app:
