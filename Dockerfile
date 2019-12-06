@@ -1,12 +1,11 @@
-#On choisit une debian
 FROM debian:latest
 
-MAINTAINER DiouxX "github@diouxx.be"
+MAINTAINER mmagalha "mmagalha@gmail.com"
 
-#Ne pas poser de question à l'installation
 ENV DEBIAN_FRONTEND noninteractive
+ENV TZ=America/Recife
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-#Installation d'apache et de php5 avec extension
 RUN apt update \
 && apt -y upgrade \
 && apt -y install \
@@ -27,11 +26,9 @@ cron \
 wget \
 jq
 
-#Copie et execution du script pour l'installation et l'initialisation de GLPI
 COPY glpi-start.sh /opt/
 COPY cust/ /tmp/.
 RUN chmod +x /opt/glpi-start.sh
 ENTRYPOINT ["/opt/glpi-start.sh"]
 
-#Exposition des ports
 EXPOSE 80 443
